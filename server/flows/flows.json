@@ -1,0 +1,12 @@
+{
+  "checkoutFlow": [
+    "Checkout.tsx",
+    "paymentService.ts",
+    "cartReducer.ts"
+  ],
+
+  "authFlow": [
+    "Login.tsx",
+    "authService.ts"
+  ]
+}
