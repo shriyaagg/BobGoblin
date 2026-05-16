@@ -1,11 +1,27 @@
 import { simpleGit } from "simple-git";
 
-const git = simpleGit();
+const git = simpleGit("../");
+
+const IGNORED_PATTERNS = [
+  ".md",
+  ".svg",
+  ".ico",
+  "package-lock.json",
+  ".gitignore"
+];
 
 export async function getChangedFiles() {
-  const diff = await git.diff(["--name-only"]);
+  const status = await git.status();
 
-  return diff
-    .split("\n")
-    .filter(Boolean);
+  const files = [
+    ...status.modified,
+    ...status.created,
+    ...status.not_added
+  ];
+
+  return files.filter(file => {
+    return !IGNORED_PATTERNS.some(pattern =>
+      file.includes(pattern)
+    );
+  });
 }
