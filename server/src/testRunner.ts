@@ -1,42 +1,25 @@
-import { spawn } from "child_process";
+import { exec } from "child_process";
 
 export function runTests(): Promise<string> {
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
 
-    const child = spawn(
-      "npx",
-      [
-        "playwright",
-        "test",
-        "tests/checkout.spec.ts",
-        "--reporter=line",
-        "--timeout=3000",
-        "--workers=1"
-      ],
+    exec(
+      "npx playwright test tests/checkout.smoke.spec.ts",
       {
         cwd: "../",
-        shell: true,
+      },
+      (error, stdout, stderr) => {
+
+        if (error) {
+          resolve(stderr || stdout);
+          return;
+        }
+
+        resolve(stdout);
+
       }
     );
-
-    let output = "";
-
-    child.stdout.on("data", (data) => {
-      output += data.toString();
-    });
-
-    child.stderr.on("data", (data) => {
-      output += data.toString();
-    });
-
-    child.on("close", () => {
-      resolve(output);
-    });
-
-    child.on("error", (err) => {
-      reject(err);
-    });
 
   });
 

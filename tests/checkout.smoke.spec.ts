@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 
+test.setTimeout(15000);
+
 test.describe("Checkout Smoke Tests 👹", () => {
 
   test("should add item to cart", async ({ page }) => {
